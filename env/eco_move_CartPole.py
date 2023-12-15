@@ -219,26 +219,27 @@ class eco_move_CartPoleEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
         #閾値設定
         flag_x = 0.1
         
-        if self.arrived_switch == 'right': # 直近に右の閾値内に入っていたら、左に行った時点で加点
-            if x < -flag_x:
-                reward += 100
-                self.arrived_switch = 'left'
-
-        elif self.arrived_switch == 'left':
-            if x > flag_x:
-                reward += 100
-                self.arrived_switch = 'right'
         # if self.arrived_switch == 'right': # 直近に右の閾値内に入っていたら、左に行った時点で加点
-        #     if x_dot < 0:
-        #         reward += 2
         #     if x < -flag_x:
+        #         reward += 100
         #         self.arrived_switch = 'left'
 
         # elif self.arrived_switch == 'left':
-        #     if x_dot > 0:
-        #         reward += 2
         #     if x > flag_x:
+        #         reward += 100
         #         self.arrived_switch = 'right'
+
+        if self.arrived_switch == 'right': # 直近に右の閾値内に入っていたら、左に行った時点で加点
+            if x_dot < 0:
+                reward += 2
+            if x < -flag_x:
+                self.arrived_switch = 'left'
+
+        elif self.arrived_switch == 'left':
+            if x_dot > 0:
+                reward += 2
+            if x > flag_x:
+                self.arrived_switch = 'right'
         
         # print(x_dot)
         

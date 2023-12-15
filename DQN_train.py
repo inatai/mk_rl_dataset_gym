@@ -79,16 +79,16 @@ elif env_name == "move_CartPole":
 elif env_name == "eco_CartPole":
     env = eco_CartPoleEnv()
     options = {
-        'max_episode': 500,
+        'max_episode': 10000,
         'batch': 128,
         'gamma': 0.99,
-        'eps_start': 0.9,
-        'eps_end': 0.05,
-        'eps_decay': 1000,
+        'eps_start': 0.05,
+        'eps_end': 0.98,
+        'eps_decay': 1500,
         'tau': 0.005,
         'lr': 1e-4,
         'done_score': None,
-        'done_scores': None
+        'done_scores': [300, 600, 900, 1200, 1500, 1800, 2100, 2400, 2700, 3000]
     }
 elif env_name == "eco_move_CartPole":
     env = eco_move_CartPoleEnv()
