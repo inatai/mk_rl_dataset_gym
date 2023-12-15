@@ -109,6 +109,7 @@ else:
 
 # ステップ数の範囲を生成
 steps_done_values = np.arange(0, options['max_episode'], 10)
+eps_value = options['eps_end'] + (options['eps_start'] - options['eps_end']) * np.exp(-1. * steps_done_values / options['eps_decay'])
 
 save_folder = f'data/weight/{env_name}/DQN'
 if not os.path.exists(save_folder): os.makedirs(save_folder)
@@ -136,7 +137,7 @@ def main():
         
         reward_sum = 0
         for t in count():
-            action = select_action(state)
+            action = select_action(state, i_episode)
             observation, reward, terminated, truncated, _ = env.step(action.item())
             done = terminated or truncated
             reward_sum += reward
@@ -227,17 +228,13 @@ optimizer = optim.AdamW(policy_net.parameters(), lr=options['lr'], amsgrad=True)
 memory = ReplayMemory(10000)
 
 
-steps_done = 0
-
 
 #ε-greedy法に従って行動を選択(エピソードが進むごとに探索の割合を低く)
-def select_action(state):
-    global steps_done
+def select_action(state, i_episode):
     sample = random.random()
+
+    eps_threshold = eps_value[i_episode]
     
-    eps_threshold = options['eps_end'] + (options['eps_start'] - options['eps_end']) * np.exp(-1. * options['steps_done_values'] / options['eps_decay'])
-    
-    steps_done += 1
     if sample > eps_threshold:
         with torch.no_grad():
             # t.max(1) will return the largest column value of each row.

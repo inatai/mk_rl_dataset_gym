@@ -13,6 +13,8 @@ steps_done_values = np.arange(0, 10000, 10)
 # εの値を計算
 eps_values = eps_end + (eps_start - eps_end) * np.exp(-1. * steps_done_values / eps_decay)
 
+print(eps_values)
+
 # グラフの描画
 plt.plot(steps_done_values, eps_values, label='ε Threshold')
 plt.axhline(0, color='black', linewidth=0.5)

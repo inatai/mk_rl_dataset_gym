@@ -2,11 +2,12 @@ import gymnasium as gym
 from env.stationary_CartPole import stationary_CartPoleEnv
 from env.move_CartPole import move_CartPoleEnv
 from env.eco_CartPole import eco_CartPoleEnv
+from env.eco_move_CartPole import eco_move_CartPoleEnv
 import keyboard
 import time
 
 
-env_name = "eco_CartPole"
+env_name = "eco_move_CartPole"
 
 if env_name == "CartPole-v1":
     env = gym.make(env_name, render_mode="human")
@@ -19,6 +20,9 @@ elif env_name == "move_CartPole":
     key_list = ["left", "right"]
 elif env_name == "eco_CartPole":
     env = eco_CartPoleEnv(render_mode="human")
+    key_list = ["left", "right", None] 
+elif env_name == "eco_move_CartPole":
+    env = eco_move_CartPoleEnv(render_mode="human")
     key_list = ["left", "right", None] 
 elif env_name == "LunarLander-v2":
     env = gym.make(env_name, render_mode="human")
@@ -49,6 +53,8 @@ def main():
         _ , reward, terminated, truncated, _  = env.step(action)
 
         done = terminated or truncated
+
+        print(reward)
 
         rewards += reward
 
