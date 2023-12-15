@@ -5,6 +5,7 @@ from env.eco_CartPole import eco_CartPoleEnv
 from env.eco_move_CartPole import eco_move_CartPoleEnv
 
 import math
+import numpy as np
 import random
 import os
 import matplotlib
@@ -26,7 +27,7 @@ if is_ipython:
     from IPython import display
 
 
-env_name = "move_CartPole"
+env_name = "eco_move_CartPole"
 device = "cuda"
 
 
@@ -92,21 +93,22 @@ elif env_name == "eco_CartPole":
 elif env_name == "eco_move_CartPole":
     env = eco_move_CartPoleEnv()
     options = {
-        'max_episode': 500,
+        'max_episode': 10000,
         'batch': 128,
         'gamma': 0.99,
-        'eps_start': 0.9,
-        'eps_end': 0.05,
-        'eps_decay': 1000,
+        'eps_start': 0.05,
+        'eps_end': 0.98,
+        'eps_decay': 1500,
         'tau': 0.005,
         'lr': 1e-4,
         'done_score': None,
-        'done_scores': None
+        'done_scores': [300, 600, 900, 1200, 1500, 1800, 2100, 2400, 2700, 3000]
     }
 else:
     assert "envを選択してください"
 
-
+# ステップ数の範囲を生成
+steps_done_values = np.arange(0, options['max_episode'], 10)
 
 save_folder = f'data/weight/{env_name}/DQN'
 if not os.path.exists(save_folder): os.makedirs(save_folder)
@@ -232,8 +234,9 @@ steps_done = 0
 def select_action(state):
     global steps_done
     sample = random.random()
-    eps_threshold = options['eps_end'] + (options['eps_start'] - options['eps_end']) * \
-        math.exp(-1. * steps_done / options['eps_decay'])
+    
+    eps_threshold = options['eps_end'] + (options['eps_start'] - options['eps_end']) * np.exp(-1. * options['steps_done_values'] / options['eps_decay'])
+    
     steps_done += 1
     if sample > eps_threshold:
         with torch.no_grad():
