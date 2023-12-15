@@ -108,7 +108,7 @@ else:
     assert "envを選択してください"
 
 # ステップ数の範囲を生成
-steps_done_values = np.arange(0, options['max_episode'], 10)
+steps_done_values = np.arange(0, options['max_episode'], 1)
 eps_value = options['eps_end'] + (options['eps_start'] - options['eps_end']) * np.exp(-1. * steps_done_values / options['eps_decay'])
 
 save_folder = f'data/weight/{env_name}/DQN'
@@ -234,12 +234,10 @@ def select_action(state, i_episode):
     sample = random.random()
 
     eps_threshold = eps_value[i_episode]
+    # print(f'{i_episode}, {eps_threshold}')
     
     if sample > eps_threshold:
         with torch.no_grad():
-            # t.max(1) will return the largest column value of each row.
-            # second column on max result is index of where max element was
-            # found, so we pick action with the larger expected reward.
             return policy_net(state).max(1)[1].view(1, 1)
     else:
         return torch.tensor([[env.action_space.sample()]], device=device, dtype=torch.long)
