@@ -94,8 +94,8 @@ elif env_name == "eco_move_CartPole":
         'max_episode': 10000,
         'batch': 128,
         'gamma': 0.99,
-        'eps_start': 0.05,
-        'eps_end': 0.98,
+        'eps_start': 0.1,
+        'eps_end': 0.9,
         'tau': 0.005,
         'lr': 1e-4,
         'done_score': None,
@@ -170,7 +170,7 @@ def main():
                     seconds = int(time.time() - start_time)
                     minutes, seconds = divmod(seconds, 60)
                     hours, minutes = divmod(minutes, 60)
-                    print(f'epi{i_episode} : [reward:{reward_sum},  episode_len:{t+1}, epsilon:{epsilon}], elapsed time:{hours:02}:{minutes:02}:{seconds:02}')
+                    print(f'epi{i_episode} : [reward:{reward_sum},  episode_len:{t+1}, epsilon:{round(epsilon, 2)}], elapsed time:{hours:02}:{minutes:02}:{seconds:02}')
                 break
         
 

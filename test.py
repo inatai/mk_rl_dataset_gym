@@ -4,7 +4,7 @@ import math
 
 # パラメータ
 eps_end = 0.98
-eps_start = 0.05
+eps_start = 0.1
 max_len = 1000000
 eps_decay = max_len * 15 / 100
 
