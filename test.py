@@ -6,7 +6,7 @@ import math
 eps_end = 0.98
 eps_start = 0.1
 max_len = 10000
-eps_decay = max_len * 15 / 100
+eps_decay = max_len * 25 / 100
 
 # ステップ数の範囲を生成
 steps_done_values = np.arange(0, max_len, 1)

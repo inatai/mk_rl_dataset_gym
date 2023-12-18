@@ -38,6 +38,7 @@ if env_name == "CartPole-v1":
     env = gym.make(env_name)
     options = {
         'max_episode': 1000,
+        'epsilon_a': 25,
         'batch': 128,
         'gamma': 0.99,
         'eps_start': 0.1, # ε-greedyに使用
@@ -53,6 +54,7 @@ elif env_name == "s_CartPole":
     env = stationary_CartPoleEnv()
     options = {
         'max_episode': 10000,
+        'epsilon_a': 25,
         'batch': 128,
         'gamma': 0.99,
         'eps_start': 0.1,
@@ -66,6 +68,7 @@ elif env_name == "move_CartPole":
     env = move_CartPoleEnv()
     options = {
         'max_episode': 10000,
+        'epsilon_a': 25,
         'batch': 128,
         'gamma': 0.99,
         'eps_start': 0.1,
@@ -79,6 +82,7 @@ elif env_name == "eco_CartPole":
     env = eco_CartPoleEnv()
     options = {
         'max_episode': 10000,
+        'epsilon_a': 25,
         'batch': 128,
         'gamma': 0.99,
         'eps_start': 0.1,
@@ -92,6 +96,7 @@ elif env_name == "eco_move_CartPole":
     env = eco_move_CartPoleEnv()
     options = {
         'max_episode': 10000,
+        'epsilon_a': 25,
         'batch': 128,
         'gamma': 0.9,
         'eps_start': 0.1,
@@ -106,7 +111,7 @@ else:
 
 # ステップ数の範囲を生成
 steps_done_values = np.arange(0, options['max_episode'], 1)
-eps_value = options['eps_end'] + (options['eps_start'] - options['eps_end']) * np.exp(-1. * steps_done_values / (options['max_episode'] * 15 / 100))
+eps_value = options['eps_end'] + (options['eps_start'] - options['eps_end']) * np.exp(-1. * steps_done_values / (options['max_episode'] * options['epsilon_a'] / 100))
 
 save_folder = f'data/weight/{env_name}/DQN'
 if not os.path.exists(save_folder): os.makedirs(save_folder)
