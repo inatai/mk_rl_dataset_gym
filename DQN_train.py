@@ -135,7 +135,7 @@ def main():
         
         reward_sum = 0
         for t in count():
-            action = select_action(state, i_episode)
+            action, epsilon = select_action(state, i_episode)
             observation, reward, terminated, truncated, _ = env.step(action.item())
             done = terminated or truncated
             reward_sum += reward
@@ -170,7 +170,7 @@ def main():
                     seconds = int(time.time() - start_time)
                     minutes, seconds = divmod(seconds, 60)
                     hours, minutes = divmod(minutes, 60)
-                    print(f'epi{i_episode} : [reward:{reward_sum},  episode_len:{t+1}], elapsed time:{hours:02}:{minutes:02}:{seconds:02}')
+                    print(f'epi{i_episode} : [reward:{reward_sum},  episode_len:{t+1}, epsilon:{epsilon}], elapsed time:{hours:02}:{minutes:02}:{seconds:02}')
                 break
         
 
