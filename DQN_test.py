@@ -15,8 +15,8 @@ def main():
     # env_name = 'CartPole-v1'
     # env_name = 's_CartPole'
     # env_name = 'move_CartPole'
-    env_name = 'move_CartPole'
-    save_path = 'move_CartPole-cuda-done1500-DQN.pth'
+    env_name = 'eco_CartPole'
+    save_path = 'eco_CartPole-cuda-done1500-DQN.pth'
     test_save_model(env_name, save_path)
 
     # env = gym.make(env_name, render_mode="human")

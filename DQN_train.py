@@ -40,8 +40,8 @@ if env_name == "CartPole-v1":
         'max_episode': 1000,
         'batch': 128,
         'gamma': 0.99,
-        'eps_start': 0.9, # ε-greedyに使用
-        'eps_end': 0.05,
+        'eps_start': 0.1, # ε-greedyに使用
+        'eps_end': 0.9,
         'eps_decay': 1000,
         'tau': 0.005, # ターゲットネットワークに使用
         'lr': 1e-4,
@@ -55,8 +55,8 @@ elif env_name == "s_CartPole":
         'max_episode': 10000,
         'batch': 128,
         'gamma': 0.99,
-        'eps_start': 0.05,
-        'eps_end': 0.98,
+        'eps_start': 0.1,
+        'eps_end': 0.9,
         'tau': 0.005,
         'lr': 1e-4,
         'done_score': None,
@@ -68,8 +68,8 @@ elif env_name == "move_CartPole":
         'max_episode': 10000,
         'batch': 128,
         'gamma': 0.99,
-        'eps_start': 0.05,
-        'eps_end': 0.98,
+        'eps_start': 0.1,
+        'eps_end': 0.9,
         'tau': 0.005,
         'lr': 1e-4,
         'done_score': None,
@@ -81,8 +81,8 @@ elif env_name == "eco_CartPole":
         'max_episode': 10000,
         'batch': 128,
         'gamma': 0.99,
-        'eps_start': 0.05,
-        'eps_end': 0.98,
+        'eps_start': 0.1,
+        'eps_end': 0.9,
         'tau': 0.005,
         'lr': 1e-4,
         'done_score': None,
@@ -93,7 +93,7 @@ elif env_name == "eco_move_CartPole":
     options = {
         'max_episode': 10000,
         'batch': 128,
-        'gamma': 0.99,
+        'gamma': 0.9,
         'eps_start': 0.1,
         'eps_end': 0.9,
         'tau': 0.005,
@@ -106,7 +106,7 @@ else:
 
 # ステップ数の範囲を生成
 steps_done_values = np.arange(0, options['max_episode'], 1)
-eps_value = options['eps_end'] + (options['eps_start'] - options['eps_end']) * np.exp(-1. * steps_done_values / options['max_episode'] * 15 / 100)
+eps_value = options['eps_end'] + (options['eps_start'] - options['eps_end']) * np.exp(-1. * steps_done_values / (options['max_episode'] * 15 / 100))
 
 save_folder = f'data/weight/{env_name}/DQN'
 if not os.path.exists(save_folder): os.makedirs(save_folder)
@@ -170,7 +170,7 @@ def main():
                     seconds = int(time.time() - start_time)
                     minutes, seconds = divmod(seconds, 60)
                     hours, minutes = divmod(minutes, 60)
-                    print(f'epi{i_episode} : [reward:{reward_sum},  episode_len:{t+1}, epsilon:{round(epsilon, 2)}], elapsed time:{hours:02}:{minutes:02}:{seconds:02}')
+                    print(f'epi{i_episode} : [reward:{reward_sum},  episode_len:{t+1}, epsilon:{round(epsilon, 3)}], elapsed time:{hours:02}:{minutes:02}:{seconds:02}')
                 break
         
 
@@ -235,7 +235,6 @@ def select_action(state, i_episode):
     sample = random.random()
 
     eps_threshold = eps_value[i_episode]
-    # print(f'{i_episode}, {eps_threshold}')
     
     if sample > eps_threshold:
         with torch.no_grad():
