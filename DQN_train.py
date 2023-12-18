@@ -5,6 +5,7 @@ from env.eco_CartPole import eco_CartPoleEnv
 from env.eco_move_CartPole import eco_move_CartPoleEnv
 
 import math
+import time
 import numpy as np
 import random
 import os
@@ -51,12 +52,11 @@ if env_name == "CartPole-v1":
 elif env_name == "s_CartPole":
     env = stationary_CartPoleEnv()
     options = {
-        'max_episode': 500,
+        'max_episode': 10000,
         'batch': 128,
         'gamma': 0.99,
-        'eps_start': 0.9,
-        'eps_end': 0.05,
-        'eps_decay': 1000,
+        'eps_start': 0.05,
+        'eps_end': 0.98,
         'tau': 0.005,
         'lr': 1e-4,
         'done_score': None,
@@ -68,9 +68,8 @@ elif env_name == "move_CartPole":
         'max_episode': 10000,
         'batch': 128,
         'gamma': 0.99,
-        'eps_start': 0.9,
-        'eps_end': 0.05,
-        'eps_decay': 1000,
+        'eps_start': 0.05,
+        'eps_end': 0.98,
         'tau': 0.005,
         'lr': 1e-4,
         'done_score': None,
@@ -84,7 +83,6 @@ elif env_name == "eco_CartPole":
         'gamma': 0.99,
         'eps_start': 0.05,
         'eps_end': 0.98,
-        'eps_decay': 1500,
         'tau': 0.005,
         'lr': 1e-4,
         'done_score': None,
@@ -98,7 +96,6 @@ elif env_name == "eco_move_CartPole":
         'gamma': 0.99,
         'eps_start': 0.05,
         'eps_end': 0.98,
-        'eps_decay': 1500,
         'tau': 0.005,
         'lr': 1e-4,
         'done_score': None,
@@ -109,7 +106,7 @@ else:
 
 # ステップ数の範囲を生成
 steps_done_values = np.arange(0, options['max_episode'], 1)
-eps_value = options['eps_end'] + (options['eps_start'] - options['eps_end']) * np.exp(-1. * steps_done_values / options['eps_decay'])
+eps_value = options['eps_end'] + (options['eps_start'] - options['eps_end']) * np.exp(-1. * steps_done_values / options['max_episode'] * 15 / 100)
 
 save_folder = f'data/weight/{env_name}/DQN'
 if not os.path.exists(save_folder): os.makedirs(save_folder)
@@ -128,6 +125,7 @@ save_model_path = f'{save_folder}/{save_model_name}'
 
 
 def main():
+    start_time = time.time()
 
     done_scores_counter = 0
     for i_episode in range(options['max_episode']):
@@ -169,7 +167,10 @@ def main():
             if done:
                 episode_durations.append(t + 1)
                 if i_episode%10 == 0:
-                    print(f'epi{i_episode} : [reward:{reward_sum},  episode_len:{t+1}]')
+                    seconds = int(time.time() - start_time)
+                    minutes, seconds = divmod(seconds, 60)
+                    hours, minutes = divmod(minutes, 60)
+                    print(f'epi{i_episode} : [reward:{reward_sum},  episode_len:{t+1}], elapsed time:{hours:02}:{minutes:02}:{seconds:02}')
                 break
         
 

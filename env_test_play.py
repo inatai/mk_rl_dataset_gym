@@ -7,7 +7,7 @@ import keyboard
 import time
 
 
-env_name = "eco_move_CartPole"
+env_name = "LunarLander-v2"
 
 if env_name == "CartPole-v1":
     env = gym.make(env_name, render_mode="human")

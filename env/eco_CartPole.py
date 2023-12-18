@@ -190,11 +190,11 @@ class eco_CartPoleEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
 
 
         if not done:
-            reward = self.__get_reward(x, x_dot)
+            reward = self.__get_reward(x, theta)
         elif self.steps_beyond_terminated is None:
             # Pole just fell!
             self.steps_beyond_terminated = 0
-            reward = self.__get_reward(x, x_dot)
+            reward = self.__get_reward(x, theta)
         else:
             if self.steps_beyond_terminated == 0:
                 logger.warn(
@@ -211,8 +211,18 @@ class eco_CartPoleEnv(gym.Env[np.ndarray, Union[int, np.ndarray]]):
         return np.array(self.state, dtype=np.float32), reward, terminated, truncated, {}
     
 
-    def __get_reward(self, x, x_dot):
+    def __get_reward(self, x, theta):
         reward = 1.0 # 生きてるだけで偉い
+                
+        #閾値設定
+        flag_x = 0.1
+        flag_theta = 3.0
+        
+        rad_theta = math.radians(flag_theta)
+        if -flag_x < x < flag_x: # 真ん中でえらい
+            reward += 1.0
+        if -rad_theta < theta < rad_theta: # ふらふらしてなくてえらい
+            reward += 1.0
         
         return reward
     

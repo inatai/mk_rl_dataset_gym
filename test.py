@@ -5,10 +5,11 @@ import math
 # パラメータ
 eps_end = 0.98
 eps_start = 0.05
-eps_decay = 1500
+max_len = 1000000
+eps_decay = max_len * 15 / 100
 
 # ステップ数の範囲を生成
-steps_done_values = np.arange(0, 10000, 10)
+steps_done_values = np.arange(0, max_len, 100)
 
 # εの値を計算
 eps_values = eps_end + (eps_start - eps_end) * np.exp(-1. * steps_done_values / eps_decay)
